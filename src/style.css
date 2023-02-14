@@ -1,0 +1,229 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.header p {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: rgba(2, 53, 53, 1);
+}
+
+.header-optionsMenu a {
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+    color: black;
+}
+
+.header-inp-search input {
+    width: 16rem;
+    height: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    font-style: italic;
+    position: relative;
+    border: 1px solid gray;
+    outline: none;
+}
+
+#searchProducts::-webkit-search-cancel-button {
+    position: relative;
+    right: 20px;
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    background-image: url('./images/search.svg');
+}
+
+.header-login-car {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.header-login-car p {
+    font-weight: bold;
+    font-size: 12px;
+    color: rgba(2, 53, 53, 1);
+}
+
+.header-login-car a {
+    cursor: pointer;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.main-banner img {
+    width: 100%;
+}
+
+.main-filters {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+.main-filters select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url(./images/flechaabaixo.svg) no-repeat center right #FFF;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 2px;
+    width: 1.5rem;
+
+}
+
+
+.main-title {
+    padding: 25px;
+}
+
+.main-cards-item{
+    display: grid;
+    grid-template-areas:
+        "item0 item1 item2 item3"
+        "item4 item5 item6 item7"
+        "item8 item9 item10 item11"
+        "item12 item13 item14 item15";
+    text-align: center;
+}
+
+.main-cards-item div {
+    margin-bottom: 10px;
+}
+
+.main-cards-item div img {
+    margin-bottom: 10px;
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+.main-cards-item div p {
+    font-size: 15px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#descricaoProduto {
+    font-weight: bold;
+}
+
+.main-cards-item div button {
+    font-size: 15px;
+    border: none;
+    background-color: #FACFCE;
+    width: 7rem;
+    height: 2.5rem;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+
+.item0 {
+    grid-area: item0;
+}
+
+.item1 {
+    grid-area: item1;
+}
+
+.item2 {
+    grid-area: item2;
+}
+
+.item3 {
+    grid-area: item3;
+}
+
+.item4 {
+    grid-area: item4;
+}
+
+.item5 {
+    grid-area: item5;
+}
+
+.item6 {
+    grid-area: item6;
+}
+
+.item7 {
+    grid-area: item7;
+}
+
+.item8 {
+    grid-area: item8;
+}
+
+.item9 {
+    grid-area: item9;
+}
+
+.item10 {
+    grid-area: item10;
+}
+
+.item11 {
+    grid-area: item11;
+}
+
+.item12 {
+    grid-area: item12;
+}
+
+.item13 {
+    grid-area: item13;
+}
+
+.item14 {
+    grid-area: item14;
+}
+
+.item15 {
+    grid-area: item15;
+}
+
+.footer {
+    background-color: #015958;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 10px;
+}
+
+.footer-info a {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+}
