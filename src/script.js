@@ -3,36 +3,98 @@ import { products } from "./produtos.js";
 console.log(products);
 
 const divCards = document.querySelector('.main-cards-item')
+const inputSearch = document.getElementById('searchProducts');
+const buttonSearch = document.getElementById('btn-search')
+const buttonSearchDelete = document.getElementById('btn-deleteSearch')
 
-function cards() {
+function formatPrice(price) {
+    return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function createCards() {
     for (let i = 0; i < products.length; i++) {
-        let imageCard = document.createElement('img')
-        let imageLikeCard = document.createElement('img')
-        let descriptionPrice = document.createElement('p')
-        let marca = document.createElement('p')
-        let stars = document.createElement('p')
+        let imgProduct = document.createElement('img')
+        let imgLike = document.createElement('img')
+        let pDescription = document.createElement('p')
+        let pMarca = document.createElement('p')
+        let pStar = document.createElement('p')
         let buttonBuy = document.createElement('button')
-        let div = document.createElement('div')
+        let newDiv = document.createElement('div')
 
-        imageCard.setAttribute('src', products[i].img)
-        imageLikeCard.setAttribute('src', 'src/images/like.svg')
-        descriptionPrice.innerText = `${products[i].name}  ${products[i].price}`
-        descriptionPrice.setAttribute('id', 'descricaoProduto')
-        marca.innerText = `${products[i].marca}, ${products[i].description}`
-        stars.innerHTML = '<img src="src/images/star.png"/>'
+        var priceFormat = formatPrice(products[i].price)
+
+        imgProduct.setAttribute('src', products[i].img)
+        imgLike.setAttribute('src', 'src/images/like.svg')
+        pDescription.innerText = `${products[i].name} \n ${priceFormat}`
+        pDescription.setAttribute('id', 'descricaoProduto')
+        pMarca.innerText = `${products[i].marca}, ${products[i].description}`
+        pStar.innerHTML = '<img src="src/images/star.png"/>'
         buttonBuy.textContent = 'Comprar'
 
-        div.classList.add('item'+[i])
-        div.appendChild(imageLikeCard)
-        div.appendChild(imageCard)
-        div.appendChild(descriptionPrice)
-        div.appendChild(marca)
-        div.appendChild(stars)
-        div.appendChild(buttonBuy)
-        divCards.append(div)
+        newDiv.classList.add('item' + [i])
+        newDiv.appendChild(imgLike)
+        newDiv.appendChild(imgProduct)
+        newDiv.appendChild(pDescription)
+        newDiv.appendChild(pMarca)
+        newDiv.appendChild(pStar)
+        newDiv.appendChild(buttonBuy)
+        divCards.append(newDiv)
     }
 }
 
-window.addEventListener('load', cards);
+window.addEventListener('load', createCards);
+
+function searchProducts() {
+    let inpValue = inputSearch.value
+    inpValue.toLowerCase()
+    let banner = document.getElementsByClassName('main-banner')
+    let filters = document.getElementsByClassName('main-filters')
+    let title = document.getElementsByClassName('main-title')
+    let footer = document.getElementsByClassName('footer')
+    let itemsCards = document.querySelectorAll('.main-cards-item div')
+    let pMessage = document.createElement('p')
+    pMessage.style.marginTop = "140px"
+    pMessage.style.marginLeft = "380px"
+    divCards.append(pMessage)
+
+    if (inpValue == "") {
+        window.location.reload(true);
+    }
+
+    for (let i = 0; i < itemsCards.length; i++) {
+        const card = itemsCards[i].textContent.toLowerCase().includes(inpValue)
+        if (!card) {
+            itemsCards[i].classList.add('invisible')
+            banner[0].classList.add('invisible')
+            filters[0].classList.add('invisible')
+            title[0].classList.add('invisible')
+            footer[0].classList.add('invisible')
+        }
+        else {
+            divCards.style.display = "flex";
+        }
+    }
+
+    const newArray = Array.from(itemsCards)
+    const todosTemClasse = newArray.every(function(classe) {
+        debugger
+        return classe.classList[1] == 'invisible';
+      });
+
+    if(todosTemClasse){
+        pMessage.innerHTML = "<p>Não foi encontrado resultado para sua pesquisa, por gentileza refaça sua busca.</p>"
+    }
+
+}
+
+buttonSearch.addEventListener('click', searchProducts)
+
+function deleteSearchProducts() {
+    inputSearch.value = '';
+    window.location.reload(true);
+}
+
+buttonSearchDelete.addEventListener('click', deleteSearchProducts)
+
 
 
