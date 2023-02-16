@@ -238,6 +238,10 @@ input[type="search"]::-webkit-search-cancel-button {
     grid-area: item15;
 }
 
+#main-card-like {
+    background-color: transparent;
+}
+
 .footer {
     background-color: #015958;
     color: white;

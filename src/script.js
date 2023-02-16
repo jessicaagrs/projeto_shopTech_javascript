@@ -20,11 +20,14 @@ function createCards() {
         let pStar = document.createElement('p')
         let buttonBuy = document.createElement('button')
         let newDiv = document.createElement('div')
+        let buttonLike = document.createElement('button')
 
         var priceFormat = formatPrice(products[i].price)
 
         imgProduct.setAttribute('src', products[i].img)
         imgLike.setAttribute('src', 'src/images/like.svg')
+        buttonLike.addEventListener('click', likeProducts)
+        buttonLike.setAttribute('id', 'main-card-like')
         pDescription.innerText = `${products[i].name} \n ${priceFormat}`
         pDescription.setAttribute('id', 'descricaoProduto')
         pMarca.innerText = `${products[i].marca}, ${products[i].description}`
@@ -32,7 +35,8 @@ function createCards() {
         buttonBuy.textContent = 'Comprar'
 
         newDiv.classList.add('item' + [i])
-        newDiv.appendChild(imgLike)
+        buttonLike.appendChild(imgLike)
+        newDiv.appendChild(buttonLike)
         newDiv.appendChild(imgProduct)
         newDiv.appendChild(pDescription)
         newDiv.appendChild(pMarca)
@@ -72,12 +76,15 @@ function searchProducts() {
         }
         else {
             divCards.style.display = "flex";
+            banner[0].classList.add('invisible')
+            filters[0].classList.add('invisible')
+            title[0].classList.add('invisible')
+            footer[0].classList.add('invisible')
         }
     }
 
     const newArray = Array.from(itemsCards)
     const todosTemClasse = newArray.every(function(classe) {
-        debugger
         return classe.classList[1] == 'invisible';
       });
 
@@ -96,5 +103,12 @@ function deleteSearchProducts() {
 
 buttonSearchDelete.addEventListener('click', deleteSearchProducts)
 
-
-
+function likeProducts(ev){
+    let image = ev.currentTarget.children[0]
+    let imagePath = ev.currentTarget.children[0].attributes[0].value
+    if(imagePath == 'src/images/like.svg'){
+        image.setAttribute('src', 'src/images/likeafter.svg')
+    } else {
+        image.setAttribute('src', 'src/images/like.svg')
+    }
+}
