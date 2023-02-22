@@ -5,7 +5,12 @@ const inputSearch = document.getElementById('searchProducts');
 const buttonSearch = document.getElementById('btn-search')
 const buttonSearchDelete = document.getElementById('btn-deleteSearch')
 const buttonFilter = document.querySelectorAll('.main-filters button')
+const buttonCart = document.querySelector('#buttonCart')
+const buttonCloseModal = document.querySelectorAll('.modal button')
+let modal = document.querySelector('.modal')
+let totalText = document.querySelector('.closeModal p')
 let listCheckbox = Array.from(document.querySelectorAll('input[type=checkbox]'))
+let amountClick = 0
 
 function formatPrice(price) {
     return price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -17,7 +22,6 @@ function createCards() {
         let imgLike = document.createElement('img')
         let pDescription = document.createElement('p')
         let pMarca = document.createElement('p')
-        let pStar = document.createElement('p')
         let buttonBuy = document.createElement('button')
         let newDiv = document.createElement('div')
         let buttonLike = document.createElement('button')
@@ -30,9 +34,9 @@ function createCards() {
         buttonLike.setAttribute('id', 'main-card-like')
         pDescription.innerText = `${products[i].name} \n ${priceFormat}`
         pDescription.setAttribute('id', 'descricaoProduto')
-        pMarca.innerText = `${products[i].marca}, ${products[i].description}}`
-        pStar.innerHTML = '<img src="src/images/star.png"/>'
+        pMarca.innerText = `${products[i].marca}, ${products[i].description}`
         buttonBuy.textContent = 'Comprar'
+        buttonBuy.addEventListener('click', buyProducts)
 
         newDiv.classList.add('item' + [i])
         buttonLike.appendChild(imgLike)
@@ -40,7 +44,6 @@ function createCards() {
         newDiv.appendChild(imgProduct)
         newDiv.appendChild(pDescription)
         newDiv.appendChild(pMarca)
-        newDiv.appendChild(pStar)
         newDiv.appendChild(buttonBuy)
         divCards.append(newDiv)
     }
@@ -184,4 +187,142 @@ function markOffInputChecked(input) {
             listCheckbox[i].checked = false
         }
     }
-}   
+}
+
+function buyProducts(ev) {
+    let data = Array.from(ev.currentTarget.parentNode.children)
+    let titleItemSelected = data[2].textContent
+    let modalInfo = modal.children[1].children
+    debugger
+
+    for (let i = 0; i < modalInfo.length; i++) {
+        if (modalInfo[i].id == "titleProduct") {
+            if (titleItemSelected.includes(modalInfo[i].textContent)) {
+                alert("Item já incluso no carrinho.")
+                return
+            }
+        }
+    }
+    amountClick++
+
+    buyProductCart(data)
+    buyAmountCart(amountClick)
+}
+
+function buyAmountCart(amount) {
+    let cartButton = document.querySelector('.header-login-car button')
+    cartButton.style.display = "block"
+    cartButton.innerText = amount
+}
+
+function buyProductCart(data) {
+    let div = document.querySelector('.itensCart')
+    let divButtons = document.createElement('div')
+    let image = document.createElement('img')
+    let title = document.createElement('p')
+    let price = document.createElement('p')
+    let input = document.createElement('input')
+    let buttonSoma = document.createElement('button')
+    let buttonDiminui = document.createElement('button')
+
+    let posicaoSrc = data[1].src.indexOf('src/');
+    let conteudoSrc = data[1].src.substring(posicaoSrc);
+    image.setAttribute('src', conteudoSrc)
+
+    let textTitle = data[2].innerText
+    let [nomeProduto, precoProduto] = textTitle.split('\n');
+    title.innerText = nomeProduto
+    title.setAttribute('id', 'titleProduct')
+    price.innerText = precoProduto
+    price.setAttribute('id', 'priceProduct')
+
+    input.setAttribute('type', 'text')
+    input.setAttribute('id', 'inputQtd')
+    input.value = 1
+
+    buttonSoma.innerText = '+'
+    buttonDiminui.innerText = '-'
+    buttonSoma.addEventListener('click', calculationQtd)
+    buttonDiminui.addEventListener('click', calculationQtd)
+
+    divButtons.setAttribute('id', 'divInputQtd')
+
+    divButtons.appendChild(buttonDiminui)
+    divButtons.appendChild(input)
+    divButtons.appendChild(buttonSoma)
+
+    div.append(image, title, price, divButtons)
+}
+
+function openCart(ev) {
+    calculationTotalOpenCart()
+    let contemItensCarrinho = ev.currentTarget.parentNode.children[4].style.display
+
+    contemItensCarrinho == 'block' ? modal.style.display = 'block' : modal.style.display = 'none'
+}
+
+buttonCart.addEventListener('click', openCart)
+
+function closeModal() {
+    modal.style.display = 'none'
+}
+
+buttonCloseModal.forEach(element => {
+    element.addEventListener('click', closeModal)
+})
+
+function calculationQtd(ev) {
+    const buttonSelected = ev.target.textContent;
+    const inputElement = ev.currentTarget.parentNode.children[1];
+    let arr = Array.from(ev.currentTarget.parentNode.parentNode.children)
+    let valueInput = Number(inputElement.value);
+
+    if (buttonSelected === "-") {
+        if (valueInput > 0) {
+            valueInput--;
+        }
+    } else {
+        valueInput++;
+    }
+
+    inputElement.value = valueInput.toString();
+    calculationTotalRefresh(arr)
+
+}
+
+buttonCloseModal.forEach(element => {
+    element.addEventListener('click', calculationQtd)
+})
+
+function calculationTotalOpenCart() {
+    let itensModal = Array.from(document.querySelector('.itensCart div').parentNode.children)
+    let somaPrice = 0
+
+    for (let i = 0; i < itensModal.length; i++) {
+        if (itensModal[i].id === "priceProduct") {
+            let stringComVirgula = itensModal[i].textContent.slice(3);
+            console.log('Valor original:', stringComVirgula);
+            stringComVirgula = stringComVirgula.replace(',', '.');
+            console.log('Valor com ponto:', stringComVirgula);
+            somaPrice += (parseFloat(stringComVirgula))
+        }
+    }
+    totalText.innerText = "Total: " + formatPrice(somaPrice)
+}
+
+function calculationTotalRefresh(arr) {
+    let arrPrice = arr
+        .filter(element => element.id === "priceProduct")
+        .map(element => parseFloat(element.textContent.slice(3).replace(",", ".")).toFixed(2));
+
+    let arrQtd = arr
+        .filter(element => element.id === "divInputQtd")
+        .map(element => parseInt(element.children[1].value));
+
+    let somaPrice = arrPrice.reduce((acc, price, index) => acc + price * arrQtd[index], 0);
+
+    totalText.innerText = "Total: " + formatPrice(somaPrice);
+    console.log(somaPrice);
+}
+
+
